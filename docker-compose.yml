@@ -1,23 +1,11 @@
-# Usar imagem do Node.js como base
-FROM node:18-alpine
+name: pocket-js-server
 
-# Definir o diretório de trabalho
-WORKDIR /app
-
-# Copiar o package.json e package-lock.json para instalar dependências
-COPY package*.json ./
-
-# Instalar dependências de produção
-RUN npm install --production --legacy-peer-deps
-
-# Copiar o código do projeto
-COPY . .
-
-# Compilar o TypeScript para JavaScript
-RUN npm run build
-
-# Expor a porta que o Fastify estará usando
-EXPOSE 3333
-
-# Comando para iniciar o servidor
-CMD ["npm", "run", "start"]
+services:
+  pg:
+    image: bitnami/postgresql:13.16.0
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=docker
+      - POSTGRES_PASSWORD=docker
+      - POSTGRES_DB=inorbit
